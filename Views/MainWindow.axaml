@@ -6,7 +6,6 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
         MinHeight="600"
         MinWidth="900"
-      
         Width="1200"
         Height="600"
         x:Class="AvaloniaContacts.Views.MainWindow"
@@ -77,7 +76,7 @@
                 <Label Content="E-Mail"></Label>
                 <TextBox Text="{Binding SelectedContact.Email}" ></TextBox>
                     <Label Content="Phone"></Label>
-                    <TextBox Text="{Binding SelectedContact.Email}" ></TextBox>
+                    <TextBox Text="{Binding SelectedContact.Phone}" ></TextBox>
                 <Label Content="Address"></Label>
                 <TextBox MinLines="1" Text="{Binding SelectedContact.Address}" ></TextBox>
                 <Label Content="Details"></Label>
