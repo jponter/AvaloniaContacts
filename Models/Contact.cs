@@ -1,5 +1,6 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace AvaloniaContacts.Models;
 
@@ -23,12 +24,16 @@ public partial class Contact : ObservableObject
     [ObservableProperty] private string _phone;
     [ObservableProperty] private string _address;
     [ObservableProperty] private string _details;
-    
+    [ObservableProperty] private int _id;
+    [ObservableProperty] bool _isLocked = true;
 
 
-   
+    [RelayCommand]
+    private void ToggleLock()
+    {
+        IsLocked = !IsLocked;
+    }
 
 
-  
 
 }

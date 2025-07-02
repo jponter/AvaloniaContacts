@@ -8,12 +8,23 @@ namespace AvaloniaContacts.Services;
 
 public static class ContactDatabaseService
 {
-    static string  folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-    static string  dbPath = Path.Combine(folder, "contacts.db");
+    static string  folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+    private static readonly string appName = "AvaloniaContacts";
+    private static readonly string dbName = "contacts.db";
+    
+    private static readonly string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), appName, dbName);
+    // static string  dbPath = Path.Combine(folder, "contacts.db");
     static string connectionString = $"Data Source={dbPath}";
 
     public static void Initialize()
     {
+        var directoryPath = Path.GetDirectoryName(dbPath);
+        if (directoryPath != null) // Ensure directoryPath is not null
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+        
         using var connection = new SqliteConnection(connectionString);
         connection.Open();
 
@@ -64,22 +75,78 @@ public static class ContactDatabaseService
         using var connection = new SqliteConnection(connectionString);
         connection.Open();
 
-        var selectCmd = connection.CreateCommand();
-        selectCmd.CommandText = "SELECT FirstName, LastName, Email, Phone, Address, Details FROM Contacts;";
-        using var reader = selectCmd.ExecuteReader();
+        var cmd = connection.CreateCommand();
+        cmd.CommandText = """
+                              SELECT Id, FirstName, LastName, Email, Phone, Address, Details
+                              FROM Contacts;
+                          """;
 
+        using var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            result.Add(new Contact(
-                reader.GetString(0),
-                reader.GetString(1),
-                reader.GetString(2),
-                reader.GetString(3),
-                reader.GetString(4),
-                reader.GetString(5)
-            ));
-        }
+            var contact = new Contact(
+                reader.GetString(1),      // FirstName
+                reader.GetString(2),      // LastName
+                reader.GetString(3),      // Email
+                reader.GetString(4),      // Phone
+                reader.GetString(5),      // Address
+                reader.GetString(6)       // Details
+            )
+            {
+                Id = reader.GetInt32(0)   //  Id
+            };
 
+            result.Add(contact);
+        }
         return result;
+    }
+    
+    public static int InsertContact(Contact c)
+    {
+        using var con = new SqliteConnection(connectionString);
+        con.Open();
+        using var cmd = con.CreateCommand();
+        cmd.CommandText = """
+                              INSERT INTO Contacts (FirstName, LastName, Email, Phone, Address, Details)
+                              VALUES ($f,$l,$e,$p,$a,$d);
+                              SELECT last_insert_rowid();
+                          """;
+        cmd.Parameters.AddWithValue("$f", c.FirstName);
+        cmd.Parameters.AddWithValue("$l", c.LastName);
+        cmd.Parameters.AddWithValue("$e", c.Email);
+        cmd.Parameters.AddWithValue("$p", c.Phone);
+        cmd.Parameters.AddWithValue("$a", c.Address);
+        cmd.Parameters.AddWithValue("$d", c.Details);
+        return Convert.ToInt32(cmd.ExecuteScalar()!);   // returns new Id
+    }
+
+    public static void UpdateContact(Contact c)
+    {
+        using var con = new SqliteConnection(connectionString);
+        con.Open();
+        using var cmd = con.CreateCommand();
+        cmd.CommandText = """
+                              UPDATE Contacts
+                              SET FirstName=$f, LastName=$l, Email=$e, Phone=$p, Address=$a, Details=$d
+                              WHERE Id=$id;
+                          """;
+        cmd.Parameters.AddWithValue("$id", c.Id);
+        cmd.Parameters.AddWithValue("$f",  c.FirstName);
+        cmd.Parameters.AddWithValue("$l",  c.LastName);
+        cmd.Parameters.AddWithValue("$e",  c.Email);
+        cmd.Parameters.AddWithValue("$p",  c.Phone);
+        cmd.Parameters.AddWithValue("$a",  c.Address);
+        cmd.Parameters.AddWithValue("$d",  c.Details);
+        cmd.ExecuteNonQuery();
+    }
+
+    public static void DeleteContact(int id)
+    {
+        using var con = new SqliteConnection(connectionString);
+        con.Open();
+        using var cmd = con.CreateCommand();
+        cmd.CommandText = "DELETE FROM Contacts WHERE Id=$id;";
+        cmd.Parameters.AddWithValue("$id", id);
+        cmd.ExecuteNonQuery();
     }
 }
