@@ -4,14 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
-        MinHeight="500"
+        MinHeight="600"
         MinWidth="900"
       
         Width="1200"
         Height="600"
         x:Class="AvaloniaContacts.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Resources/darkness.ico"
         Title="AvaloniaContacts">
 
     <Design.DataContext>
@@ -26,8 +26,10 @@
         
        
             <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-                <Label Content="Contacts" ></Label>
+                <Label Content="Contacts" FontWeight="Black"></Label>
                 <ListBox  Height="350"
+                          BorderThickness="1"
+                          BorderBrush="Black"
                     ItemsSource="{Binding   Contacts}"
                          SelectedItem="{Binding SelectedContact, Mode=TwoWay}">
             <ListBox.ItemTemplate>
@@ -53,13 +55,16 @@
      
         
         <!-- right side -->
+        
         <Grid Grid.Column="1" Grid.RowSpan="2">
-            <Border Margin="10" BorderBrush="Black" BorderThickness="1 " Padding="10">
-            <StackPanel>
+            <Label Content="Contact" FontWeight="Black" Margin="10 " Padding="10"></Label>
+            <!-- <Border Margin="10" BorderBrush="Black" BorderThickness="1 " Padding="15,0"> -->
+                
+                <StackPanel Margin="20">
             
                 <CheckBox HorizontalAlignment="Right" Content="Unlock to Edit"
                           IsChecked="{Binding IsLocked, Mode=TwoWay}"
-                          Margin="0,10,0,10">
+                          Margin="0,10,10,10">
                     <CheckBox.RenderTransform>
                         <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
                     </CheckBox.RenderTransform>
@@ -71,14 +76,16 @@
                 <TextBox Text="{Binding SelectedContact.LastName}" ></TextBox>
                 <Label Content="E-Mail"></Label>
                 <TextBox Text="{Binding SelectedContact.Email}" ></TextBox>
+                    <Label Content="Phone"></Label>
+                    <TextBox Text="{Binding SelectedContact.Email}" ></TextBox>
                 <Label Content="Address"></Label>
                 <TextBox MinLines="1" Text="{Binding SelectedContact.Address}" ></TextBox>
                 <Label Content="Details"></Label>
-                <TextBox MinLines="1" Text="{Binding SelectedContact.Details}" ></TextBox>
+                <TextBox MinLines="4" Text="{Binding SelectedContact.Details}" ></TextBox>
                 
             </StackPanel>
             </StackPanel>
-            </Border>
+            <!-- </Border> -->
               
         </Grid>
         

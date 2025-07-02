@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.IO;
 using AvaloniaContacts.Models;
 using Microsoft.Data.Sqlite;
 
@@ -6,11 +8,13 @@ namespace AvaloniaContacts.Services;
 
 public static class ContactDatabaseService
 {
-    private const string ConnectionString = "Data Source=contacts.db";
+    static string  folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+    static string  dbPath = Path.Combine(folder, "contacts.db");
+    static string connectionString = $"Data Source={dbPath}";
 
     public static void Initialize()
     {
-        using var connection = new SqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(connectionString);
         connection.Open();
 
         var tableCmd = connection.CreateCommand();
@@ -30,7 +34,7 @@ public static class ContactDatabaseService
 
     public static void SaveContacts(ObservableCollection<Contact> contacts)
     {
-        using var connection = new SqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(connectionString);
         connection.Open();
 
         var deleteCmd = connection.CreateCommand();
@@ -57,7 +61,7 @@ public static class ContactDatabaseService
     public static ObservableCollection<Contact> LoadContacts()
     {
         var result = new ObservableCollection<Contact>();
-        using var connection = new SqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(connectionString);
         connection.Open();
 
         var selectCmd = connection.CreateCommand();

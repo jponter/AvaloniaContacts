@@ -10,6 +10,9 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**"/>
+        <None Remove="Resources\darkness.ico" />
+        <AvaloniaResource Include="Resources\darkness.ico" />
+        
     </ItemGroup>
 
     <ItemGroup>
@@ -26,5 +29,11 @@
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
         <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.0-preview.5.25277.114" />
         <PackageReference Include="Romzetron.Avalonia" Version="11.3.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="$(UserProfile)\.nuget\packages\sqlitepclraw.bundle_e_sqlite3\*\runtimes\**\**\*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 </Project>
