@@ -11,6 +11,7 @@ namespace AvaloniaContacts;
 
 public partial class App : Application
 {
+    private static string version = "1.0.3";
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -25,6 +26,7 @@ public partial class App : Application
             DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = new MainWindow
             {
+                Title = $"Avalonia Contacts {version}",
                 DataContext = new MainWindowViewModel(),
             };
         }
