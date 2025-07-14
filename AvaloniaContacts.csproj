@@ -6,6 +6,11 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        
+        
+       
+
+        
     </PropertyGroup>
 
     <ItemGroup>
@@ -36,4 +41,15 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+    
+    
+<PropertyGroup>
+  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+  <!-- Format the build number to be within valid range -->
+  <BuildNumber Condition="'$(BuildNumber)' == ''">$([System.DateTime]::UtcNow.ToString('MMdd'))</BuildNumber>
+  <Version>1.0.1.$(BuildNumber)</Version>
+  <AssemblyVersion>1.0.1.$(BuildNumber)</AssemblyVersion>
+  <FileVersion>1.0.1.$(BuildNumber)</FileVersion>
+  <InformationalVersion>1.0.1+$(BuildNumber)</InformationalVersion>
+</PropertyGroup>
 </Project>
