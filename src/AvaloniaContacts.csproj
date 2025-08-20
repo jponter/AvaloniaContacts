@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        
+        
+       
+
+        
+    </PropertyGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\**"/>
+        <None Remove="Resources\darkness.ico" />
+        <AvaloniaResource Include="Resources\darkness.ico" />
+        
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.3.2" />
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.2" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.0"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.2" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0"/>
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.0">
+            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
+        <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.0-preview.5.25277.114" />
+        <PackageReference Include="Romzetron.Avalonia" Version="11.3.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="$(UserProfile)\.nuget\packages\sqlitepclraw.bundle_e_sqlite3\*\runtimes\**\**\*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    
+    
+<PropertyGroup>
+  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+  <!-- Format the build number to be within valid range -->
+  <BuildNumber Condition="'$(BuildNumber)' == ''">$([System.DateTime]::UtcNow.ToString('MMdd'))</BuildNumber>
+  <Version>1.0.1.$(BuildNumber)</Version>
+  <AssemblyVersion>1.0.1.$(BuildNumber)</AssemblyVersion>
+  <FileVersion>1.0.1.$(BuildNumber)</FileVersion>
+  <InformationalVersion>1.0.1+$(BuildNumber)</InformationalVersion>
+</PropertyGroup>
+</Project>
